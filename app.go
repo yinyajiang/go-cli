@@ -55,7 +55,8 @@ type App struct {
 }
 
 // NewApp creates a new cli Application
-func NewApp(hidden ...bool) *App {
+// default hiden help and version
+func NewApp(showHelpVersion ...bool) *App {
 	a := &App{
 		Name:        filepath.Base(os.Args[0]),
 		Usage:       "A new cli application",
@@ -63,10 +64,11 @@ func NewApp(hidden ...bool) *App {
 		ShowHelp:    showHelp,
 		ShowVersion: showVersion,
 	}
-	if len(hidden) > 0 && hidden[0] {
-		a.HiddenHelp = true
-		a.HiddenVersion = true
+	if len(showHelpVersion) == 0 {
+		showHelpVersion = []bool{false}
 	}
+	a.HiddenHelp = !showHelpVersion[0]
+	a.HiddenVersion = !showHelpVersion[0]
 	return a
 }
 
