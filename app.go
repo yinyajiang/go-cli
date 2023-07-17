@@ -55,14 +55,19 @@ type App struct {
 }
 
 // NewApp creates a new cli Application
-func NewApp() *App {
-	return &App{
+func NewApp(hidden ...bool) *App {
+	a := &App{
 		Name:        filepath.Base(os.Args[0]),
 		Usage:       "A new cli application",
 		Version:     "0.0.0",
 		ShowHelp:    showHelp,
 		ShowVersion: showVersion,
 	}
+	if len(hidden) > 0 && hidden[0] {
+		a.HiddenHelp = true
+		a.HiddenVersion = true
+	}
+	return a
 }
 
 func (a *App) initialize() {
