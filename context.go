@@ -262,7 +262,9 @@ func (c *Context) ShowHelpAndExit(code int) {
 func (c *Context) ShowError(err error) {
 	w := os.Stderr
 	fmt.Fprintln(w, err)
-	fmt.Fprintln(w, fmt.Sprintf("\nRun '%s --help' for more information", c.name))
+	if !c.app.HiddenHelp {
+		fmt.Fprintln(w, fmt.Sprintf("\nRun '%s --help' for more information", c.name))
+	}
 	exit(1)
 }
 

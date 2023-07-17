@@ -37,6 +37,8 @@ type App struct {
 	HiddenHelp    bool
 	HiddenVersion bool
 
+	AfterExeGlobalCommand bool
+
 	// Display full help
 	ShowHelp func(*HelpContext)
 	// Display full version
@@ -135,11 +137,19 @@ func (a *App) Run(arguments []string) {
 		return
 	}
 
-	if a.Action != nil {
-		defer newCtx.handlePanic()
-		a.Action(newCtx)
-	} else if cl.command == nil {
-		newCtx.ShowHelpAndExit(0)
+	_globalCommand := func() {
+		if a.Action != nil {
+			defer newCtx.handlePanic()
+			a.Action(newCtx)
+		} else if cl.command == nil {
+			newCtx.ShowHelpAndExit(0)
+		}
+	}
+
+	if a.AfterExeGlobalCommand {
+		defer _globalCommand()
+	} else {
+		_globalCommand()
 	}
 
 	// run command
