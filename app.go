@@ -33,7 +33,7 @@ type App struct {
 	// List of commands to execute
 	Commands []*Command
 
-	// Hidden --help and --version from usage
+	// Hidden --help and --version
 	HiddenHelp    bool
 	HiddenVersion bool
 
@@ -65,19 +65,24 @@ func NewApp() *App {
 
 func (a *App) initialize() {
 	// add --help
-	a.Flags = append(a.Flags, &Flag{
-		Name:   "help",
-		Usage:  "print this usage",
-		IsBool: true,
-		Hidden: a.HiddenHelp,
-	})
+	if !a.HiddenHelp {
+		a.Flags = append(a.Flags, &Flag{
+			Name:   "help",
+			Usage:  "print this usage",
+			IsBool: true,
+			Hidden: a.HiddenHelp,
+		})
+	}
+
 	// add --version
-	a.Flags = append(a.Flags, &Flag{
-		Name:   "version",
-		Usage:  "print version information",
-		IsBool: true,
-		Hidden: a.HiddenVersion,
-	})
+	if !a.HiddenVersion {
+		a.Flags = append(a.Flags, &Flag{
+			Name:   "version",
+			Usage:  "print version information",
+			IsBool: true,
+			Hidden: a.HiddenVersion,
+		})
+	}
 
 	// initialize flags
 	for _, f := range a.Flags {
@@ -110,11 +115,11 @@ func (a *App) Run(arguments []string) {
 	}
 
 	// show --help
-	if newCtx.GetBool("help") {
+	if !a.HiddenHelp && newCtx.GetBool("help") {
 		newCtx.ShowHelpAndExit(0)
 	}
 	// show --version
-	if newCtx.GetBool("version") {
+	if !a.HiddenVersion && newCtx.GetBool("version") {
 		a.ShowVersion(a)
 		os.Exit(0)
 	}
@@ -130,16 +135,16 @@ func (a *App) Run(arguments []string) {
 		return
 	}
 
+	if a.Action != nil {
+		defer newCtx.handlePanic()
+		a.Action(newCtx)
+	} else if cl.command == nil {
+		newCtx.ShowHelpAndExit(0)
+	}
+
 	// run command
 	if cl.command != nil {
 		cl.command.Run(newCtx)
 		return
-	}
-
-	if a.Action != nil {
-		defer newCtx.handlePanic()
-		a.Action(newCtx)
-	} else {
-		newCtx.ShowHelpAndExit(0)
 	}
 }

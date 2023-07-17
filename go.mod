@@ -1,3 +1,3 @@
-module github.com/subchen/go-cli/v3
+module github.com/yinyajiang/go-cli
 
 go 1.15
