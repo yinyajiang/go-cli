@@ -27,3 +27,10 @@ func (v *boolValue) Set(value string) error {
 func (v *boolValue) String() string {
 	return strconv.FormatBool(*v.val)
 }
+
+func BoolString(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
+}

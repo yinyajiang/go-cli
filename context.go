@@ -79,16 +79,13 @@ func (c *Context) GetStringSlice(name string, def ...[]string) []string {
 }
 
 // GetBool returns flag value as bool
-func (c *Context) GetBool(name string, def ...bool) bool {
+func (c *Context) GetBool(name string) bool {
 	f := lookupFlag(c.flags, name)
-	if f != nil && f.GetValue() != "" {
+	if f != nil {
 		b, err := strconv.ParseBool(f.GetValue())
 		if err == nil {
 			return b
 		}
-	}
-	if len(def) > 0 {
-		return def[0]
 	}
 	return false
 }
