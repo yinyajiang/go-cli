@@ -57,7 +57,7 @@ func (c *Context) IsSet(name string) bool {
 // GetString returns flag value as string
 func (c *Context) GetString(name string, def ...string) string {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		return f.GetValue()
 	}
 	if len(def) > 0 {
@@ -69,19 +69,19 @@ func (c *Context) GetString(name string, def ...string) string {
 // GetStringSlice returns flag value as string slice
 func (c *Context) GetStringSlice(name string, def ...[]string) []string {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		return strings.Split(f.GetValue(), ",")
 	}
 	if len(def) > 0 {
 		return def[0]
 	}
-	return nil
+	return []string{}
 }
 
 // GetBool returns flag value as bool
 func (c *Context) GetBool(name string, def ...bool) bool {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		b, err := strconv.ParseBool(f.GetValue())
 		if err == nil {
 			return b
@@ -96,7 +96,7 @@ func (c *Context) GetBool(name string, def ...bool) bool {
 // GetInt returns flag value as int
 func (c *Context) GetInt(name string, def ...int) int {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseInt(f.GetValue(), 0, 0)
 		if err == nil {
 			return int(v)
@@ -126,7 +126,7 @@ func (c *Context) GetInt8(name string, def ...int8) int8 {
 // GetInt16 returns flag value as int16
 func (c *Context) GetInt16(name string, def ...int16) int16 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseInt(f.GetValue(), 0, 16)
 		if err == nil {
 			return int16(v)
@@ -141,7 +141,7 @@ func (c *Context) GetInt16(name string, def ...int16) int16 {
 // GetInt32 returns flag value as int32
 func (c *Context) GetInt32(name string, def ...int32) int32 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseInt(f.GetValue(), 0, 32)
 		if err == nil {
 			return int32(v)
@@ -156,7 +156,7 @@ func (c *Context) GetInt32(name string, def ...int32) int32 {
 // GetInt64 returns flag value as int64
 func (c *Context) GetInt64(name string, def ...int64) int64 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseInt(f.GetValue(), 0, 64)
 		if err == nil {
 			return int64(v)
@@ -171,7 +171,7 @@ func (c *Context) GetInt64(name string, def ...int64) int64 {
 // GetUint returns flag value as uint
 func (c *Context) GetUint(name string) uint {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseUint(f.GetValue(), 0, 0)
 		if err == nil {
 			return uint(v)
@@ -183,7 +183,7 @@ func (c *Context) GetUint(name string) uint {
 // GetUint8 returns flag value as uint8
 func (c *Context) GetUint8(name string, def ...uint8) uint8 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseUint(f.GetValue(), 0, 8)
 		if err == nil {
 			return uint8(v)
@@ -198,7 +198,7 @@ func (c *Context) GetUint8(name string, def ...uint8) uint8 {
 // GetUint16 returns flag value as uint16
 func (c *Context) GetUint16(name string, def ...uint16) uint16 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseUint(f.GetValue(), 0, 16)
 		if err == nil {
 			return uint16(v)
@@ -213,7 +213,7 @@ func (c *Context) GetUint16(name string, def ...uint16) uint16 {
 // GetUint32 returns flag value as uint32
 func (c *Context) GetUint32(name string, def ...uint32) uint32 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseUint(f.GetValue(), 0, 32)
 		if err == nil {
 			return uint32(v)
@@ -228,7 +228,7 @@ func (c *Context) GetUint32(name string, def ...uint32) uint32 {
 // GetUint64 returns flag value as uint64
 func (c *Context) GetUint64(name string, def ...uint64) uint64 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseUint(f.GetValue(), 0, 64)
 		if err == nil {
 			return uint64(v)
@@ -243,7 +243,7 @@ func (c *Context) GetUint64(name string, def ...uint64) uint64 {
 // GetFloat32 returns flag value as float32
 func (c *Context) GetFloat32(name string, def ...float32) float32 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseFloat(f.GetValue(), 32)
 		if err == nil {
 			return float32(v)
@@ -258,7 +258,7 @@ func (c *Context) GetFloat32(name string, def ...float32) float32 {
 // GetFloat64 returns flag value as float64
 func (c *Context) GetFloat64(name string, def ...float64) float64 {
 	f := lookupFlag(c.flags, name)
-	if f != nil {
+	if f != nil && f.GetValue() != "" {
 		v, err := strconv.ParseFloat(f.GetValue(), 64)
 		if err == nil {
 			return float64(v)
