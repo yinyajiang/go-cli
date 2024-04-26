@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"runtime"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -323,4 +324,12 @@ func showVersion(app *App) {
 
 	fmt.Fprintf(helpWriter, "Go version: %s\n", runtime.Version())
 	fmt.Fprintf(helpWriter, "OS/Arch:    %s/%v\n", runtime.GOOS, runtime.GOARCH)
+}
+
+func isNum(s string) bool {
+	if s == "" {
+		return false
+	}
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
 }

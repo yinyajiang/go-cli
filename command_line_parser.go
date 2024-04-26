@@ -58,7 +58,7 @@ func (c *commandline) parseOneArg(i int, arguments []string) (bool, error) {
 			valueInline = kv[1]
 		} else if i+1 < len(arguments) { // --name value
 			next := arguments[i+1]
-			if !strings.HasPrefix(next, "-") {
+			if !strings.HasPrefix(next, "-") || isNum(next) {
 				valueNext = next
 			}
 		}
@@ -73,7 +73,7 @@ func (c *commandline) parseOneArg(i int, arguments []string) (bool, error) {
 			}
 		} else if i+1 < len(arguments) { // -x value
 			next := arguments[i+1]
-			if !strings.HasPrefix(next, "-") {
+			if !strings.HasPrefix(next, "-") || isNum(next) {
 				valueNext = next
 			}
 		}
