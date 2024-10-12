@@ -94,11 +94,13 @@ func (c *commandline) parseOneArg(i int, arguments []string) (bool, error) {
 	}
 
 	if flag.IsBool {
+		if valueNext != "" {
+			return true, flag.SetValue(valueNext)
+		}
 		if valueInline == "" {
 			valueInline = "true"
 		}
-		err := flag.SetValue(valueInline)
-		return false, err
+		return false, flag.SetValue(valueInline)
 	}
 
 	value := valueInline + valueNext
